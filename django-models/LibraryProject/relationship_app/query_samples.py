@@ -6,13 +6,12 @@ from relationship_app.models import Author, Book, Library, Librarian
 def get_books_by_author(author_name):
     """
     Returns all books written by the author with the given name.
-    If the author does not exist, returns an empty list.
     """
     try:
         author = Author.objects.get(name=author_name)
-        return author.books.all()
+        return Book.objects.filter(author=author)
     except Author.DoesNotExist:
-        return []
+        return Book.objects.none()
 
 
 # -------------------------
@@ -62,4 +61,5 @@ if __name__ == "__main__":
 
     librarian = get_librarian_for_library(library_name)
     print(f"\nLibrarian of {library_name}: {librarian if librarian else 'No librarian assigned'}")
+
 
