@@ -5,10 +5,14 @@ from relationship_app.models import Author, Book, Library, Librarian
 # -------------------------
 def get_books_by_author(author_name):
     """
-    Returns a queryset of all books written by the author with the given name.
-    If the author does not exist, returns an empty queryset.
+    Returns all books written by the author with the given name.
+    If the author does not exist, returns an empty list.
     """
-    return Book.objects.filter(author__name=author_name)
+    try:
+        author = Author.objects.get(name=author_name)
+        return author.books.all()
+    except Author.DoesNotExist:
+        return []
 
 
 # -------------------------
@@ -16,13 +20,14 @@ def get_books_by_author(author_name):
 # -------------------------
 def get_books_in_library(library_name):
     """
-    Returns a queryset of all books in the library with the given name.
+    Returns all books in the library with the given name.
     If the library does not exist, returns an empty queryset.
     """
-    library = Library.objects.filter(name=library_name).first()
-    if library:
+    try:
+        library = Library.objects.get(name=library_name)
         return library.books.all()
-    return Book.objects.none()
+    except Library.DoesNotExist:
+        return Book.objects.none()
 
 
 # -------------------------
@@ -31,12 +36,13 @@ def get_books_in_library(library_name):
 def get_librarian_for_library(library_name):
     """
     Returns the librarian associated with the library.
-    If the library does not exist or has no librarian, returns None.
+    If the library does not exist, returns None.
     """
-    library = Library.objects.filter(name=library_name).first()
-    if library and hasattr(library, "librarian"):
+    try:
+        library = Library.objects.get(name=library_name)
         return library.librarian
-    return None
+    except (Library.DoesNotExist, Librarian.DoesNotExist, AttributeError):
+        return None
 
 
 # -------------------------
@@ -57,4 +63,3 @@ if __name__ == "__main__":
     librarian = get_librarian_for_library(library_name)
     print(f"\nLibrarian of {library_name}: {librarian if librarian else 'No librarian assigned'}")
 
-    
