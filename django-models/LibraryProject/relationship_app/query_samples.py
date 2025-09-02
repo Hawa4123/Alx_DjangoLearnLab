@@ -35,12 +35,11 @@ def get_books_in_library(library_name):
 def get_librarian_for_library(library_name):
     """
     Returns the librarian associated with the library.
-    If the library does not exist, returns None.
     """
     try:
         library = Library.objects.get(name=library_name)
-        return library.librarian
-    except (Library.DoesNotExist, Librarian.DoesNotExist, AttributeError):
+        return Librarian.objects.get(library=library)
+    except (Library.DoesNotExist, Librarian.DoesNotExist):
         return None
 
 
@@ -61,5 +60,6 @@ if __name__ == "__main__":
 
     librarian = get_librarian_for_library(library_name)
     print(f"\nLibrarian of {library_name}: {librarian if librarian else 'No librarian assigned'}")
+
 
 
