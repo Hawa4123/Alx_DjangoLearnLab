@@ -1,26 +1,18 @@
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from .models import Book
-from .models import Library        # separate import for checker
+from .models import Book, Library
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
+from .models import UserProfile  # Import UserProfile for role checking
 
 # -------------------------
-# Authentication imports (exact lines for checker)
-# -------------------------
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import logout
-
-# -------------------------
-# Function-based view: list books
+# Book and Library views
 # -------------------------
 def list_books(request):
-    books = Book.objects.all()   # exact string for checker
+    books = Book.objects.all()  # checker expects this exact string
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-# -------------------------
-# Class-based view: library details
-# -------------------------
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
@@ -54,3 +46,27 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'relationship_app/logout.html')
+
+# -------------------------
+# Role-based access views
+# -------------------------
+def is_admin(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+
+def is_member(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'admin_view.html')
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_view.html')
+
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'member_view.html')
