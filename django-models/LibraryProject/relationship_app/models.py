@@ -9,7 +9,15 @@ class Book(models.Model):
     author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
     published_date = models.DateField(blank=True, null=True)  # optional
     isbn = models.CharField(max_length=13, blank=True, null=True)  # optional
-
+    
+class Library(models.Model):
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True, null=True)
+    
+  class Librarian(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    library = models.ForeignKey(Library, on_delete=models.CASCADE, related_name='librarians')
+  
 class Author(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(blank=True, null=True)  # optional
@@ -29,7 +37,10 @@ class UserProfile(models.Model):
             
       def __str__(self):
         return self.name  # Checker expects this exact string
-
+          
+      def __str__(self):
+        return self.user.username
+          
 # Automatically create UserProfile when a new User is created
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
