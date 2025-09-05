@@ -2,6 +2,10 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic.detail import DetailView  # <-- corrected import
 from .models import Book
 from .models import Library  # <-- separate import for checker
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 # -------------------------
 # Function-based View
