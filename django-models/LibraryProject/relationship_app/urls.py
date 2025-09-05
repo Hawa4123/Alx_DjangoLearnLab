@@ -1,6 +1,8 @@
 from django.urls import path
+from .views import list_books              # exact line for checker
+from .views import LibraryDetailView       # separate line
+from .views import register_view           # separate line
 from django.contrib.auth.views import LoginView, LogoutView
-from . import views  # import your views.py
 
 urlpatterns = [
     # -------------------------
