@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
 
 # -------------------------
 # Function-based View
@@ -51,3 +52,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'relationship_app/logout.html')
+    
+# -------------------------
+# Role check function
+# -------------------------
+def is_admin(user):
+    return hasattr(user, "userprofile") and user.userprofile.role == "Admin"
+    
+# -------------------------
+# Admin-only view
+# -------------------------
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, "relationship_app/admin_view.html")
