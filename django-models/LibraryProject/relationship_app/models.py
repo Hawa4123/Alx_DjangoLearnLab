@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+<<<<<<< HEAD
 from django.db import models
 
 class Book(models.Model):
@@ -22,6 +23,9 @@ class Author(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(blank=True, null=True)  # optional
     
+=======
+
+>>>>>>> temp-edit
 class UserProfile(models.Model):
     ROLE_CHOICES = (
         ('Admin', 'Admin'),
@@ -31,6 +35,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+<<<<<<< HEAD
     
         def __str__(self):
         return self.title  # Checker expects this
@@ -42,6 +47,13 @@ class UserProfile(models.Model):
         return self.user.username
           
 # Automatically create UserProfile when a new User is created
+=======
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+# Signal to automatically create UserProfile when a new User is created
+>>>>>>> temp-edit
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -50,4 +62,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+<<<<<<< HEAD
    
+=======
+>>>>>>> temp-edit
