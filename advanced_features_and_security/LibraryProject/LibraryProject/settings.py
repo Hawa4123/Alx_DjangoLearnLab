@@ -123,4 +123,27 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DEBUG = False
+ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
+
+# -----------------------------
+# Security configurations
+# -----------------------------
+
+# Protect against XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the site from being rendered in a frame (clickjacking protection)
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent the browser from guessing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Ensure CSRF cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# Ensure session cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+
 
