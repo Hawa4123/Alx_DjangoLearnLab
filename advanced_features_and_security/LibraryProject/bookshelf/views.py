@@ -5,6 +5,7 @@ from .models import Book, Library, UserProfile
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
+from .forms import ExampleForm
 
 # -------------------------
 # Book and Library Views
@@ -17,7 +18,17 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
-
+    
+def example_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_books')  # Make sure you have a URL named 'list_books'
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
+    
 # -------------------------
 # Authentication Views
 # -------------------------
@@ -72,4 +83,5 @@ def librarian_view(request):
 
 @user_passes_test(is_member)
 def member_view(request):
+
     return render(request, "relationship_app/member_view.html")
