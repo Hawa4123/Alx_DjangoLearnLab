@@ -164,5 +164,10 @@ X_FRAME_OPTIONS = "DENY"  # Prevent framing of site
 # Enable browser XSS filter
 SECURE_BROWSER_XSS_FILTER = True
 
+# -------------------------
+# Secure proxy SSL header (for deployments behind a proxy)
+# -------------------------
+# Tells Django that 'X-Forwarded-Proto' header should be trusted to determine HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
