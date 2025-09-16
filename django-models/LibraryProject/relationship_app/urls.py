@@ -1,5 +1,4 @@
 from django.urls import path
-<<<<<<< HEAD
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import list_books, LibraryDetailView
@@ -15,8 +14,6 @@ urlpatterns = [
 ]
 from django.urls import path
 from .views import list_books, LibraryDetailView
-
-=======
 from .views import list_books              # exact line for checker
 from .views import LibraryDetailView       # separate line
 from .views import register_view           # separate line
@@ -36,4 +33,4 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
 ]
->>>>>>> temp-edit
+
