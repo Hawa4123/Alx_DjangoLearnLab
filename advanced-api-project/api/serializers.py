@@ -13,3 +13,10 @@ class BookSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Title cannot be empty.")
         return value
+class AuthorSerializer(serializers.ModelSerializer):
+    # Include all books by this author
+    books = BookSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Author
+        fields = ['id', 'name', 'bio', 'books']
