@@ -1,5 +1,19 @@
+<<<<<<< HEAD
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.routers import DefaultRouter
+from .views import YourModelViewSet
+
+router = DefaultRouter()
+router.register(r'yourmodel', YourModelViewSet, basename='yourmodel')
+
+urlpatterns = [
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('', include(router.urls)),
+]
+=======
 """
-URL configuration for api_project project.
+URL configuration for advanced_api_project project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
 <<<<<<< HEAD
@@ -27,3 +41,4 @@ urlpatterns = [
     ]
 
 
+>>>>>>> e2b71aa3a299cf5cc532066e2d6f76fbfac0e3e6
