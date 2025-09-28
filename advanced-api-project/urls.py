@@ -4,7 +4,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 from .views import YourModelViewSet
 from django.contrib import admin
+from django.urls import path, include  # include is required
 
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),  # <- include the API app URLs
+]
 
 router = DefaultRouter()
 router.register(r'yourmodel', YourModelViewSet, basename='yourmodel')
@@ -13,10 +18,7 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('', include(router.urls)),
 ]
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # <- include the API app URLs
-]
+
 """
 URL configuration for advanced_api_project project.
 
