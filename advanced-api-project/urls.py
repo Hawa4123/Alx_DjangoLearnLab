@@ -1,15 +1,12 @@
 # advanced-api-project/urls.py
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include  # must import include
 from rest_framework.authtoken.views import obtain_auth_token
 
+# The only urlpatterns list
 urlpatterns = [
-    # Admin site
     path('admin/', admin.site.urls),
-
-    # Include API app URLs (must exist exactly for the check)
-    path('api/', include('api.urls')),
-
-    # Token authentication endpoint
+    path('api/', include('api.urls')),  # <- must exist exactly like this
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
+
