@@ -11,3 +11,10 @@ class BookSerializer(serializers.ModelSerializer):
         if value and (value < 0 or value > 2100):
             raise serializers.ValidationError("Publication year must be between 0 and 2100.")
         return value
+
+class AuthorSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True, read_only=True)  # <-- nested relationship
+
+    class Meta:
+        model = Author
+        fields = ['id', 'name', 'birth_date', 'books']
