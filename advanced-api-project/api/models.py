@@ -12,6 +12,8 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     published_date = models.DateField(null=True, blank=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
-
+    publication_year = models.IntegerField(null=True, blank=True)  # <-- required field
     def __str__(self):
         return self.title
+ def __str__(self):
+        return f"{self.title} ({self.publication_year})"
