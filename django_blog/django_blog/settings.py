@@ -63,6 +63,17 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_blog_db',      # Your database name
+        'USER': 'your_db_user',        # PostgreSQL username
+        'PASSWORD': 'your_db_password',# PostgreSQL password
+        'HOST': 'localhost',           # Usually 'localhost'
+        'PORT': '5432',                # Default PostgreSQL port
+    }
+}
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
