@@ -9,3 +9,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+<<<<<<< HEAD
+=======
+
+>>>>>>> 932d7d079c50c8402369b362e7796077cc771de9
