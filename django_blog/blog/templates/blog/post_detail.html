@@ -17,3 +17,20 @@
     <p><a href="{% url 'post-list' %}">Back to posts</a></p>
   </article>
 {% endblock %}
+<<<<<<< HEAD
+=======
+3) post_form.html (for Create & Update)
+html
+Copy code
+{% extends 'blog/base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+{% block content %}
+  <h1>{% if form.instance.pk %}Edit Post{% else %}Create New Post{% endif %}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+  </form>
+  <p><a href="{% url 'post-list' %}">Back to posts</a></p>
+{% endblock %}
+>>>>>>> 3e43a0addf28aaf2e8d37f6a2a0d3c7fa7e0f04f
