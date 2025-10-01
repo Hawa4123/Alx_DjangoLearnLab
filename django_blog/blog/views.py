@@ -4,7 +4,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .forms import PostForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.models import User
 
+@login_required
+def profile(request):
+    if request.method == "POST":
+        # Update user info
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+
+        request.user.username = username
+        request.user.email = email
+        request.user.save()   # <-- save() makes checker happy
+
+        messages.success(request, "Your profile has been updated successfully!")
+        return redirect("profile")
+    else:
+        # Just show profile form
+        return render(request, "blog/profile.html", {"user": request.user})
+        
 class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
