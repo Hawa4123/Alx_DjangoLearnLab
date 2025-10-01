@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; margin: 0; padding: 0 1rem; }
+nav { background:#f4f4f4; padding: 0.5rem; margin-bottom: 1rem; }
+nav a { margin-right: 1rem; text-decoration: none; color: #333; }
+.container { max-width: 800px; margin: auto; }
+.message { padding: 0.5rem; margin-bottom: 1rem; border-radius: 3px; }
+.message.success { background: #e6ffed; border:1px solid #8fce9b; }

@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+  <h2>Profile</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Account</h3>
+    {{ u_form.as_p }}
+    <h3>Profile</h3>
+    {{ p_form.as_p }}
+    <button type="submit">Update</button>
+  </form>
+
+  <h3>Current Info</h3>
+  <p>Username: {{ request.user.username }}</p>
+  <p>Email: {{ request.user.email }}</p>
+  {% if request.user.profile.image %}
+    <img src="{{ request.user.profile.image.url }}" alt="Profile image" width="150">
+  {% endif %}
+  <p>Bio: {{ request.user.profile.bio }}</p>
+{% endblock %}
