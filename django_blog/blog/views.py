@@ -8,6 +8,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.generic import CreateView, UpdateView, DeleteView
+from .models import Post, Comment
+from .forms import CommentForm
 
 @login_required
 def profile(request):
@@ -25,6 +28,43 @@ def profile(request):
     else:
         # Just show profile form
         return render(request, "blog/profile.html", {"user": request.user})
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/add_comment.html'
+
+    def form_valid(self, form):
+        post_id = self.kwargs['post_id']
+        form.instance.author = self.request.user
+        form.instance.post = get_object_or_404(Post, id=post_id)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()  # redirect to post detail
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/edit_comment.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/delete_comment.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
         
 class PostListView(ListView):
     model = Post
