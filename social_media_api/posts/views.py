@@ -2,6 +2,22 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import Post, Like
 from notifications.models import Notification
+from django.shortcuts import get_object_or_404
+from .models import Post
+from .serializers import PostSerializer
+
+class FeedView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get(self, request):
+        """
+        Returns posts from users that the current user follows,
+        ordered by creation date (most recent first).
+        """
+        following_users = request.user.following.all()
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        serializer = self.get_serializer(posts, many=True)
 
 class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
