@@ -5,7 +5,44 @@ from notifications.models import Notification
 from django.shortcuts import get_object_or_404
 from .models import Post
 from .serializers import PostSerializer
+from rest_framework import viewsets, permissions
+from rest_framework.exceptions import PermissionDenied
+from .models import Post, Comment
+from .serializers import PostSerializer, CommentSerializer
 
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit or delete it.
+    """
+    def has_object_permission(self, request, view, obj):
+        # Safe methods (GET, HEAD, OPTIONS) are allowed
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Write permissions only for the owner
+        return obj.author == request.user
+
+class PostViewSet(viewsets.ModelViewSet):
+    """
+    Provides CRUD for Post model.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    Provides CRUD for Comment model.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+        
 class FeedView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializer
