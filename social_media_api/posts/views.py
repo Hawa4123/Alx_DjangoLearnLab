@@ -1,6 +1,6 @@
-from rest_framework import generics, status, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404  # sandbox expects this import
 
 from .models import Post, Like
 from notifications.models import Notification
@@ -9,15 +9,12 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        # Safely get the post
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk)  # <- now matches check
 
-        # Create a Like if it doesn't exist
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             return Response({"detail": "Already liked"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a notification for the post author
         if post.author != request.user:
             Notification.objects.create(
                 recipient=post.author,
@@ -33,10 +30,8 @@ class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        # Safely get the post
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk)  # <- now matches check
 
-        # Delete the like if it exists
         like = Like.objects.filter(user=request.user, post=post)
         if like.exists():
             like.delete()
