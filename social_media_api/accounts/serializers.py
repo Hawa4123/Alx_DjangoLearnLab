@@ -1,9 +1,10 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 CustomUser = get_user_model()
 
+# Registration Serializer
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
@@ -26,6 +27,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             profile_picture=validated_data.get('profile_picture', None)
         )
-        # Automatically create an auth token
         Token.objects.create(user=user)
         return user
+
+# Login Serializer
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        user = authenticate(username=attrs.get('username'), password=attrs.get('password'))
+        if not user:
+            raise serializers.ValidationError("Invalid username or password")
+        attrs['user'] = user
+        return attrs
