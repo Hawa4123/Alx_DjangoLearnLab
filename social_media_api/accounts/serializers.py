@@ -11,7 +11,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'email', 'password', 'password2', 'bio', 'profile_picture')
-        extra_kwargs = {'email': {'required': True}}
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -27,6 +26,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             profile_picture=validated_data.get('profile_picture', None)
         )
-        # Create token for the new user
+        # Automatically create an auth token
         Token.objects.create(user=user)
         return user
