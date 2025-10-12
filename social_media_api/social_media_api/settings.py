@@ -11,6 +11,18 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+# Base directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'replace-with-your-secret-key')
+
+# Turn off debug for production
+DEBUG = False
+
+# Set allowed hosts
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yourdomain.com']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     'rest_framework',
+    'django_filters',
+
+    'accounts',
+    'posts',
+    'notifications',
 ]
 
 MIDDLEWARE = [
